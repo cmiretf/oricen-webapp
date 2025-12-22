@@ -14,10 +14,10 @@
 ## System Architecture
 
 ### Technology Stack
-- **Frontend**: React 18 with Vite
-- **Routing**: React Router DOM v6
+- **Frontend**: Vue.js 3 with Vite
+- **Routing**: Vue Router v4
 - **Styling**: Tailwind CSS with PostCSS and Autoprefixer
-- **Icons**: Lucide React
+- **Icons**: Lucide Vue Next
 - **Development Server**: Vite on port 5000 with all hosts allowed
 
 ### Project Structure
@@ -26,23 +26,25 @@ src/
 ├── assets/
 │   └── logo.avif          # User's Oricen logo
 ├── components/
-│   ├── Header.jsx         # Responsive navigation header
-│   ├── Footer.jsx         # Footer with social links and collaborators
-│   └── Layout.jsx         # Wrapper component with fade-in animation
+│   ├── Header.vue         # Responsive navigation header
+│   ├── Footer.vue         # Footer with social links and collaborators
+│   └── Layout.vue         # Wrapper component with fade-in animation
 ├── pages/
-│   ├── HomePage.jsx       # Hero, statistics, specialists, CTA
-│   ├── QuienesSomosPage.jsx    # About Us with mission/vision
-│   ├── ServiciosPage.jsx       # Service tiers (Origen, Brújula, Atlas)
-│   ├── ContactoPage.jsx        # Contact form and information
-│   ├── ComprarPage.jsx         # Purchase/checkout page
-│   └── LoginPage.jsx           # Login interface
+│   ├── HomePage.vue       # Hero, statistics, specialists, CTA
+│   ├── QuienesSomosPage.vue    # About Us with mission/vision
+│   ├── ServiciosPage.vue       # Service tiers (Origen, Brújula, Atlas)
+│   ├── ContactoPage.vue        # Contact form and information
+│   ├── ComprarPage.vue         # Purchase/checkout page
+│   └── LoginPage.vue           # Login interface
+├── router/
+│   └── index.js           # Vue Router configuration
 ├── index.css              # Tailwind + custom styles
-├── main.jsx               # React entry point
-└── App.jsx                # Router configuration
+├── main.js                # Vue entry point
+└── App.vue                # Main app component
 
 root/
 ├── index.html             # HTML entry point
-├── vite.config.js         # Vite configuration with allowedHosts
+├── vite.config.js         # Vite configuration with Vue plugin
 ├── tailwind.config.js     # Tailwind CSS configuration
 ├── postcss.config.js      # PostCSS configuration
 └── package.json           # Dependencies
@@ -67,9 +69,10 @@ root/
 - **All pages**: Smooth fade-in transitions, fully responsive mobile design
 
 ## Important Files
-- `src/App.jsx` - Main application routing
-- `src/components/Header.jsx` - Navigation header with responsive menu
-- `src/components/Footer.jsx` - Footer with collaborators section
+- `src/App.vue` - Main application component
+- `src/router/index.js` - Vue Router configuration
+- `src/components/Header.vue` - Navigation header with responsive menu
+- `src/components/Footer.vue` - Footer with collaborators section
 - `src/assets/logo.avif` - Application logo (AVIF format)
 - `vite.config.js` - Vite server configuration (allowedHosts: true)
 
@@ -83,8 +86,8 @@ root/
 None currently - project uses only npm packages listed in package.json
 
 ## Recent Changes
-- Reconstructed entire project after git reset to clean commit history
-- All pages and components rebuilt with proper structure
-- Logo copied to src/assets for proper version control
-- .gitignore configured to exclude demo_inicial/ and attached_assets/
-- Workflow configured for npm run dev on port 5000
+- Migrated entire application from React to Vue.js 3
+- All components rewritten using Vue 3 Composition API with `<script setup>`
+- Vue Router v4 configured for client-side routing
+- Lucide Vue Next for icons
+- Same design, functionality, and pages maintained
