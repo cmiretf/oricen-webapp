@@ -40,8 +40,8 @@
         <div>
           <nav class="flex flex-col gap-2">
             <router-link to="/politica-privacidad" class="text-sm text-[#2B4C7E] underline hover:no-underline">Política de Privacidad</router-link>
-            <a href="#" class="text-sm text-[#2B4C7E] underline hover:no-underline">Declaración de Accesibilidad</a>
-            <a href="#" class="text-sm text-[#2B4C7E] underline hover:no-underline">Términos y Condiciones</a>
+            <router-link to="/politica-privacidad" class="text-sm text-[#2B4C7E] underline hover:no-underline">Declaración de Accesibilidad</router-link>
+            <router-link to="/politica-privacidad" class="text-sm text-[#2B4C7E] underline hover:no-underline">Términos y Condiciones</router-link>
           </nav>
         </div>
 
