@@ -82,8 +82,69 @@ root/
   - `attached_assets/` - Assets folder excluded from commits (prevents large files)
   - Standard Node.js ignore patterns
 
+## Portal Module (Firebase-based)
+
+### Overview
+A complete personalized portal module integrated with Firebase for user management, document handling, evaluations, forms, appointments, and reports.
+
+### Portal Structure
+```
+src/portal/
+├── firebase.js              # Firebase configuration
+├── router.js                # Portal routes (desacopladas)
+├── composables/
+│   └── useAuth.js           # Authentication composable
+├── components/
+│   └── PortalHeader.vue     # Portal header component
+├── services/
+│   ├── userService.js       # User management
+│   ├── documentService.js   # Document upload/download
+│   ├── formService.js       # Dynamic forms
+│   ├── evaluationService.js # Evaluations & access keys
+│   ├── appointmentService.js# Calendar & appointments
+│   └── reportService.js     # Final reports
+└── pages/
+    ├── PortalLogin.vue      # Login with Google
+    ├── UserPortal.vue       # Main user dashboard
+    ├── UserDocuments.vue    # Document management
+    ├── UserForms.vue        # Form completion
+    ├── UserEvaluation.vue   # Evaluations & access keys
+    ├── UserAppointments.vue # Appointment booking
+    ├── UserReports.vue      # Download reports
+    ├── AdminDashboard.vue   # Admin panel
+    ├── AdminUsers.vue       # User management
+    ├── AdminUserDetail.vue  # Individual user panel
+    ├── AdminForms.vue       # Form creation
+    └── AdminAppointments.vue# Appointment management
+```
+
+### Portal URLs
+- `/portal/login` - Login with Google
+- `/portal` - User personal area
+- `/portal/documentos` - Documents section
+- `/portal/formularios` - Forms section
+- `/portal/evaluacion` - Evaluations section
+- `/portal/citas` - Calendar and appointments
+- `/portal/informes` - Final reports
+- `/admin` - Admin dashboard
+- `/admin/usuarios` - User management
+- `/admin/usuarios/:id` - Individual user panel
+- `/admin/formularios` - Form management
+- `/admin/citas` - Appointment management
+
+### Service Types
+- **A (Origen)**: Documents + Forms
+- **B (Brújula)**: Documents + Evaluation
+- **C (Atlas)**: Full process (all sections)
+
+### Firebase Configuration Required
+Secrets needed (see GUIA_FIREBASE.md):
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_APP_ID`
+
 ## External Dependencies
-None currently - project uses only npm packages listed in package.json
+- **Firebase** - Authentication, Firestore database, Storage
 
 ## Recent Changes
 - Migrated entire application from React to Vue.js 3
@@ -91,3 +152,4 @@ None currently - project uses only npm packages listed in package.json
 - Vue Router v4 configured for client-side routing
 - Lucide Vue Next for icons
 - Same design, functionality, and pages maintained
+- **NEW**: Added complete Firebase portal module with user/admin areas
