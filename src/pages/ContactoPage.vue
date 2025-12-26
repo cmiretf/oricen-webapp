@@ -69,10 +69,6 @@
                 Madrid (ESIC University)
               </p>
             </div>
-
-            <div class="pt-8 border-t">
-              <img :src="logo" alt="Oricen Logo" class="h-20 w-auto" />
-            </div>
           </div>
         </div>
       </div>
