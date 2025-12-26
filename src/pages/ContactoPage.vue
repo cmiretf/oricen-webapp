@@ -70,23 +70,23 @@
               </p>
             </div>
 
-            <div class="rounded-lg overflow-hidden shadow-md h-64 border border-gray-200">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.662283842323!2d-3.7915!3d40.4215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd41860882d23b37%3A0x8670c5285749f7e4!2sCamino%20Valdenigriales%2C%20S%2FN%2C%2028223%20Pozuelo%20de%20Alarc%C3%B3n%2C%20Madrid!5e0!3m2!1ses!2ses!4v1710000000000!5m2!1ses!2ses" 
-                width="100%" 
-                height="100%" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-
             <div class="pt-8 border-t">
               <img :src="logo" alt="Oricen Logo" class="h-20 w-auto" />
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="mt-16 rounded-lg overflow-hidden shadow-md h-96 border border-gray-200">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.662283842323!2d-3.7915!3d40.4215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd41860882d23b37%3A0x8670c5285749f7e4!2sCamino%20Valdenigriales%2C%20S%2FN%2C%2028223%20Pozuelo%20de%20Alarc%C3%B3n%2C%20Madrid!5e0!3m2!1ses!2ses!4v1710000000000!5m2!1ses!2ses" 
+          width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
     </div>
   </Layout>
