@@ -20,7 +20,7 @@
         </div>
         <div class="hidden md:block">
           <img 
-            src="https://images.unsplash.com/photo-1507842217343-583f20270319?w=600&q=80" 
+            src="/attached_assets/stock_images/modern_university_li_85b04a88.jpg" 
             alt="Biblioteca" 
             class="rounded-lg shadow-lg w-full h-full object-cover"
           />
