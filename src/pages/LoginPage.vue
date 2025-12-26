@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <div class="flex items-center justify-center min-h-[calc(100vh-160px)] bg-gray-50">
+    <div class="flex items-center justify-center min-h-[calc(100vh-160px)] bg-gray-50 py-20">
       <div class="w-full max-w-md">
         <div class="bg-white rounded-lg shadow-lg p-8">
           <div class="text-center mb-8">
@@ -11,10 +11,8 @@
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
             <div>
-              <button type="button" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" viewBox="0 0 24 24">
-                  <text x="5" y="18" font-size="20" fill="currentColor">G</text>
-                </svg>
+              <button type="button" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-3">
+                <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-5 h-5" />
                 Continuar con Google
               </button>
             </div>
