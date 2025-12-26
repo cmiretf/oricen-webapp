@@ -67,20 +67,8 @@
       </div>
 
       <div class="mt-12 pt-8 border-t">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div class="text-center md:text-left flex-1">
-            <p class="text-sm font-semibold text-gray-700 mb-2">UNIVERSO START<span class="text-[#C4D70F]">up</span></p>
-          </div>
-          
-          <div class="flex items-center gap-4">
-            <div class="w-px h-8 bg-[#2B4C7E]"></div>
-            <p class="text-sm font-semibold text-[#2B4C7E]">COLABORADORES</p>
-            <div class="w-px h-8 bg-[#2B4C7E]"></div>
-          </div>
-          
-          <div class="text-center md:text-right flex-1">
-            <p class="text-sm font-semibold text-[#2B4C7E]">ESIC<br/>University</p>
-          </div>
+        <div class="flex justify-center">
+          <img src="../assets/collaborators.png" alt="Colaboradores: Universo Startup, ESIC University" class="h-16 w-auto" />
         </div>
       </div>
     </div>
