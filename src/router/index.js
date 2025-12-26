@@ -5,6 +5,7 @@ import ServiciosPage from '../pages/ServiciosPage.vue'
 import ContactoPage from '../pages/ContactoPage.vue'
 import ComprarPage from '../pages/ComprarPage.vue'
 import LoginPage from '../pages/LoginPage.vue'
+import PoliticaPrivacidadPage from '../pages/PoliticaPrivacidadPage.vue'
 
 const routes = [
   { path: '/', component: HomePage },
@@ -12,7 +13,8 @@ const routes = [
   { path: '/servicios', component: ServiciosPage },
   { path: '/contacto', component: ContactoPage },
   { path: '/comprar', component: ComprarPage },
-  { path: '/login', component: LoginPage }
+  { path: '/login', component: LoginPage },
+  { path: '/politica-privacidad', component: PoliticaPrivacidadPage }
 ]
 
 const router = createRouter({

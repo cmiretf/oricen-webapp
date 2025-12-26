@@ -29,7 +29,7 @@
           <p class="text-sm text-gray-600">info@oricen.com</p>
           <p class="text-sm text-gray-600 mt-2">+34 633580559</p>
           <p class="text-sm text-gray-600 mt-4">
-            <a href="#" class="text-[#2B4C7E] underline hover:no-underline">
+            <a href="https://maps.app.goo.gl/PD75dBfY14otDTfP7" target="_blank" rel="noopener noreferrer" class="text-[#2B4C7E] underline hover:no-underline">
               Camino Valdenigriales<br/>
               S/N, 28223, Pozuelo de<br/>
               Alarcón (ESIC University)
@@ -39,7 +39,7 @@
 
         <div>
           <nav class="flex flex-col gap-2">
-            <a href="#" class="text-sm text-[#2B4C7E] underline hover:no-underline">Política de Privacidad</a>
+            <router-link to="/politica-privacidad" class="text-sm text-[#2B4C7E] underline hover:no-underline">Política de Privacidad</router-link>
             <a href="#" class="text-sm text-[#2B4C7E] underline hover:no-underline">Declaración de Accesibilidad</a>
             <a href="#" class="text-sm text-[#2B4C7E] underline hover:no-underline">Términos y Condiciones</a>
           </nav>
