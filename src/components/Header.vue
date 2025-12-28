@@ -24,7 +24,7 @@
 
         <div class="hidden md:flex items-center">
           <router-link
-            to="/login"
+            to="/portal/login"
             class="text-[#2B4C7E] font-medium hover:text-[#1e3a5f] transition-colors"
           >
             Iniciar sesión
@@ -53,7 +53,7 @@
           {{ link.name }}
         </router-link>
         <router-link
-          to="/login"
+          to="/portal/login"
           class="block px-4 py-3 text-sm font-medium text-[#2B4C7E]"
           @click="isMenuOpen = false"
         >

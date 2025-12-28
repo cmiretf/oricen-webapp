@@ -17,7 +17,7 @@ const routes = [
   { path: '/servicios', component: ServiciosPage },
   { path: '/contacto', component: ContactoPage },
   { path: '/comprar', component: ComprarPage },
-  { path: '/login', component: LoginPage },
+  { path: '/login', redirect: '/portal/login' },
   { path: '/politica-privacidad', component: PoliticaPrivacidadPage },
   ...portalRoutes
 ]
