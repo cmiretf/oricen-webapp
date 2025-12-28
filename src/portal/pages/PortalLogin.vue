@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row">
-    <!-- Lado Izquierdo: Branding/Imagen -->
     <div class="hidden md:flex md:w-1/2 bg-[#2B4C7E] p-12 flex-col justify-between text-white relative overflow-hidden">
       <div class="relative z-10">
         <img :src="logo" alt="Oricen Logo" class="h-16 w-auto brightness-0 invert" />
@@ -10,7 +9,6 @@
         </div>
       </div>
       
-      <!-- Círculos decorativos -->
       <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
       <div class="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
 
@@ -21,17 +19,19 @@
       </div>
     </div>
 
-    <!-- Lado Derecho: Formulario de Login -->
     <div class="flex-1 flex items-center justify-center p-6 md:p-12">
       <div class="max-w-md w-full">
-        <!-- Logo visible solo en móvil -->
         <div class="md:hidden text-center mb-8">
           <img :src="logo" alt="Oricen Logo" class="h-16 w-auto mx-auto" />
         </div>
 
         <div class="mb-10 text-center md:text-left">
-          <h2 class="text-3xl font-bold text-gray-900">Bienvenido de nuevo</h2>
-          <p class="text-gray-500 mt-2">Ingresa a tu cuenta para continuar con tu proceso.</p>
+          <h2 class="text-3xl font-bold text-gray-900">
+            {{ isRegisterMode ? 'Crear cuenta' : 'Bienvenido de nuevo' }}
+          </h2>
+          <p class="text-gray-500 mt-2">
+            {{ isRegisterMode ? 'Regístrate para comenzar tu proceso.' : 'Ingresa a tu cuenta para continuar con tu proceso.' }}
+          </p>
         </div>
 
         <div v-if="errorMsg" class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg flex items-center gap-3">
@@ -44,10 +44,68 @@
             <div class="absolute top-0 left-0 w-full h-full border-4 border-blue-100 rounded-full"></div>
             <div class="absolute top-0 left-0 w-full h-full border-4 border-t-[#2B4C7E] rounded-full animate-spin"></div>
           </div>
-          <p class="mt-4 text-gray-600 font-medium">Iniciando sesión segura...</p>
+          <p class="mt-4 text-gray-600 font-medium">{{ isRegisterMode ? 'Creando cuenta...' : 'Iniciando sesión segura...' }}</p>
         </div>
 
         <div v-else class="space-y-6">
+          <form @submit.prevent="handleEmailAuth" class="space-y-4">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+              <input
+                id="email"
+                v-model="email"
+                type="email"
+                required
+                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2B4C7E] focus:border-transparent transition-all"
+                placeholder="tu@email.com"
+              />
+            </div>
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+              <input
+                id="password"
+                v-model="password"
+                type="password"
+                required
+                minlength="6"
+                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2B4C7E] focus:border-transparent transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+            <div v-if="isRegisterMode">
+              <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirmar contraseña</label>
+              <input
+                id="confirmPassword"
+                v-model="confirmPassword"
+                type="password"
+                required
+                minlength="6"
+                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2B4C7E] focus:border-transparent transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full py-4 bg-[#2B4C7E] text-white font-semibold rounded-xl hover:bg-[#1a3a61] transition-all duration-200 active:scale-[0.98]"
+            >
+              {{ isRegisterMode ? 'Crear cuenta' : 'Iniciar sesión' }}
+            </button>
+          </form>
+
+          <div class="text-center">
+            <button 
+              @click="toggleMode"
+              class="text-sm text-[#2B4C7E] hover:text-[#1a3a61] font-medium transition-colors"
+            >
+              {{ isRegisterMode ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate' }}
+            </button>
+          </div>
+
+          <div class="relative py-4">
+            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+            <div class="relative flex justify-center text-sm"><span class="px-2 bg-[#f8fafc] text-gray-400">o continúa con</span></div>
+          </div>
+
           <div class="space-y-4">
             <button 
               @click="onGoogleClick"
@@ -61,11 +119,6 @@
               <span>Continuar con Google</span>
               <div class="absolute inset-0 rounded-xl group-hover:bg-black/[0.02] pointer-events-none"></div>
             </button>
-          </div>
-
-          <div class="relative py-4">
-            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-            <div class="relative flex justify-center text-sm"><span class="px-2 bg-[#f8fafc] text-gray-400">Acceso seguro y privado</span></div>
           </div>
 
           <div class="text-center">
@@ -97,10 +150,14 @@ import { useAuth } from "../composables/useAuth";
 import logo from "../../assets/logo.avif";
 
 const router = useRouter();
-const { user, userRole, loading, error, loginWithGoogle, initAuth } = useAuth();
+const { user, userRole, loading, error, loginWithGoogle, loginWithEmail, registerWithEmail, initAuth } = useAuth();
 
 const isLoading = ref(true);
 const errorMsg = ref(null);
+const isRegisterMode = ref(false);
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
 
 onMounted(() => {
   console.log("PortalLogin mounted");
@@ -108,6 +165,37 @@ onMounted(() => {
   isLoading.value = false;
   console.log("PortalLogin ready");
 });
+
+const toggleMode = () => {
+  isRegisterMode.value = !isRegisterMode.value;
+  errorMsg.value = null;
+  password.value = '';
+  confirmPassword.value = '';
+};
+
+const handleEmailAuth = async () => {
+  errorMsg.value = null;
+  
+  if (isRegisterMode.value) {
+    if (password.value !== confirmPassword.value) {
+      errorMsg.value = 'Las contraseñas no coinciden.';
+      return;
+    }
+    try {
+      isLoading.value = true;
+      await registerWithEmail(email.value, password.value);
+    } catch (err) {
+      isLoading.value = false;
+    }
+  } else {
+    try {
+      isLoading.value = true;
+      await loginWithEmail(email.value, password.value);
+    } catch (err) {
+      isLoading.value = false;
+    }
+  }
+};
 
 const onGoogleClick = async () => {
   console.log("=== CLICK DETECTADO ===");

@@ -18,7 +18,7 @@ export const appointmentService = {
     const docRef = await addDoc(collection(db, 'appointments'), {
       userId,
       ...appointmentData,
-      status: 'pending',
+      status: appointmentData.status || 'pending',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     })
@@ -39,11 +39,30 @@ export const appointmentService = {
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   },
 
+  async getAppointmentById(appointmentId) {
+    const docSnap = await getDoc(doc(db, 'appointments', appointmentId))
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() }
+    }
+    return null
+  },
+
+  async updateAppointment(appointmentId, data) {
+    await updateDoc(doc(db, 'appointments', appointmentId), {
+      ...data,
+      updatedAt: serverTimestamp()
+    })
+  },
+
   async updateAppointmentStatus(appointmentId, status) {
     await updateDoc(doc(db, 'appointments', appointmentId), {
       status,
       updatedAt: serverTimestamp()
     })
+  },
+
+  async deleteAppointment(appointmentId) {
+    await deleteDoc(doc(db, 'appointments', appointmentId))
   },
 
   async getAvailableSlots(date) {
