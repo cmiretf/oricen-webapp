@@ -49,6 +49,7 @@ const { user, userRole, loading, error, loginWithGoogle, initAuth } = useAuth()
 initAuth()
 
 const handleGoogleLogin = async () => {
+  console.log('Botón de login clickeado')
   await loginWithGoogle()
 }
 

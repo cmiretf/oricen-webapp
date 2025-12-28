@@ -2,6 +2,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { auth, db } from '../firebase'
 import { 
   signInWithPopup, 
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider, 
   signOut, 
   onAuthStateChanged 
@@ -17,7 +19,18 @@ const error = ref(null)
 export function useAuth() {
   let unsubscribe = null
 
-  const initAuth = () => {
+  const initAuth = async () => {
+    // Verificar si hay un resultado de redirect pendiente
+    try {
+      const result = await getRedirectResult(auth)
+      if (result) {
+        console.log('Redirect result received:', result.user.email)
+      }
+    } catch (err) {
+      console.error('Redirect result error:', err)
+      error.value = err.message
+    }
+    
     unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         user.value = firebaseUser
@@ -65,26 +78,17 @@ export function useAuth() {
 
   const loginWithGoogle = async () => {
     try {
-      console.log('Iniciando login con Google...')
+      console.log('Iniciando login con Google usando redirect...')
       error.value = null
       loading.value = true
       const provider = new GoogleAuthProvider()
       provider.setCustomParameters({ prompt: 'select_account' })
       
-      // Intentar primero con redirect si popup falla o para mayor compatibilidad
-      try {
-        await signInWithPopup(auth, provider)
-      } catch (popupErr) {
-        console.warn('Popup blocked or failed, falling back to redirect:', popupErr)
-        if (popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/cancelled-popup-request') {
-          const { signInWithRedirect } = await import('firebase/auth')
-          await signInWithRedirect(auth, provider)
-        } else {
-          throw popupErr
-        }
-      }
+      // Usar redirect directamente para evitar problemas con popups bloqueados en iframes
+      await signInWithRedirect(auth, provider)
     } catch (err) {
       console.error('Login error details:', err)
+      loading.value = false
       if (err.code === 'auth/operation-not-allowed') {
         error.value = 'El inicio de sesión con Google no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
       } else if (err.code === 'auth/unauthorized-domain') {
@@ -92,8 +96,6 @@ export function useAuth() {
       } else {
         error.value = `Error: ${err.message}`
       }
-    } finally {
-      loading.value = false
     }
   }
 
