@@ -19,19 +19,23 @@ const error = ref(null)
 export function useAuth() {
   let unsubscribe = null
 
-  const initAuth = async () => {
-    // Verificar si hay un resultado de redirect pendiente
-    try {
-      const result = await getRedirectResult(auth)
-      if (result) {
-        console.log('Redirect result received:', result.user.email)
-      }
-    } catch (err) {
-      console.error('Redirect result error:', err)
-      error.value = err.message
-    }
+  const initAuth = () => {
+    console.log('initAuth called')
+    
+    // Verificar resultado de redirect en background (no bloquear)
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          console.log('Redirect result received:', result.user.email)
+        }
+      })
+      .catch((err) => {
+        console.error('Redirect result error:', err)
+        error.value = err.message
+      })
     
     unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log('Auth state changed:', firebaseUser?.email || 'no user')
       if (firebaseUser) {
         user.value = firebaseUser
         await loadUserProfile(firebaseUser.uid)

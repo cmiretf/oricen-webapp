@@ -50,11 +50,11 @@ const { user, userRole, loading, error, loginWithGoogle, initAuth } = useAuth()
 const isLoading = ref(true)
 const errorMsg = ref(null)
 
-onMounted(async () => {
+onMounted(() => {
   console.log('PortalLogin mounted')
-  await initAuth()
+  initAuth()
   isLoading.value = false
-  console.log('PortalLogin ready, loading:', loading.value)
+  console.log('PortalLogin ready')
 })
 
 const onGoogleClick = async () => {
