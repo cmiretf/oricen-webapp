@@ -8,19 +8,20 @@
           <p class="text-gray-600 mt-2">Accede a tu área personalizada</p>
         </div>
 
-        <div v-if="error" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-          {{ error }}
+        <div v-if="errorMsg" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          {{ errorMsg }}
         </div>
 
-        <div v-if="loading" class="text-center py-8">
+        <div v-if="isLoading" class="text-center py-8">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2B4C7E] mx-auto"></div>
           <p class="mt-4 text-gray-600">Cargando...</p>
         </div>
 
         <div v-else>
           <button 
-            @click="handleGoogleLogin"
-            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
+            type="button"
+            @click="onGoogleClick"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-3 cursor-pointer"
           >
             <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-5 h-5" />
             Continuar con Google
@@ -38,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 import logo from '../../assets/logo.avif'
@@ -46,20 +47,43 @@ import logo from '../../assets/logo.avif'
 const router = useRouter()
 const { user, userRole, loading, error, loginWithGoogle, initAuth } = useAuth()
 
-initAuth()
+const isLoading = ref(true)
+const errorMsg = ref(null)
 
-const handleGoogleLogin = async () => {
-  console.log('Botón de login clickeado')
-  await loginWithGoogle()
+onMounted(async () => {
+  console.log('PortalLogin mounted')
+  await initAuth()
+  isLoading.value = false
+  console.log('PortalLogin ready, loading:', loading.value)
+})
+
+const onGoogleClick = async () => {
+  console.log('=== CLICK DETECTADO ===')
+  try {
+    isLoading.value = true
+    await loginWithGoogle()
+  } catch (err) {
+    console.error('Error en login:', err)
+    errorMsg.value = err.message
+    isLoading.value = false
+  }
 }
 
 watch([user, userRole], ([newUser, newRole]) => {
+  console.log('Auth state changed:', { user: newUser?.email, role: newRole })
   if (newUser && newRole) {
     if (newRole === 'admin') {
       router.push('/admin')
     } else {
       router.push('/portal')
     }
+  }
+})
+
+watch(error, (newError) => {
+  if (newError) {
+    errorMsg.value = newError
+    isLoading.value = false
   }
 })
 </script>
