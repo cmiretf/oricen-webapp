@@ -26,3 +26,5 @@ attached_assets/
 *.njsproj
 *.sln
 *.sw?
+
+src/portal/firebase.config.local.js
