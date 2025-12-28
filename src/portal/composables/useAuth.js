@@ -82,14 +82,13 @@ export function useAuth() {
 
   const loginWithGoogle = async () => {
     try {
-      console.log('Iniciando login con Google usando redirect...')
+      console.log('Iniciando login con Google usando popup...')
       error.value = null
       loading.value = true
       const provider = new GoogleAuthProvider()
       provider.setCustomParameters({ prompt: 'select_account' })
       
-      // Usar redirect directamente para evitar problemas con popups bloqueados en iframes
-      await signInWithRedirect(auth, provider)
+      await signInWithPopup(auth, provider)
     } catch (err) {
       console.error('Login error details:', err)
       loading.value = false
@@ -97,6 +96,8 @@ export function useAuth() {
         error.value = 'El inicio de sesión con Google no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
       } else if (err.code === 'auth/unauthorized-domain') {
         error.value = 'Este dominio no está autorizado en Firebase (Authentication > Settings > Authorized domains).'
+      } else if (err.code === 'auth/popup-blocked') {
+        error.value = 'El navegador bloqueó la ventana emergente. Por favor, permite las ventanas emergentes para este sitio.'
       } else {
         error.value = `Error: ${err.message}`
       }
