@@ -20,7 +20,7 @@
         </div>
         <div class="hidden md:block">
           <img 
-            src="/attached_assets/stock_images/modern_university_li_85b04a88.jpg" 
+            :src="modernUniversityImg" 
             alt="Biblioteca" 
             class="rounded-lg shadow-lg w-full h-full object-cover"
           />
@@ -80,4 +80,5 @@
 
 <script setup>
 import Layout from '../components/Layout.vue'
+import modernUniversityImg from '../assets/images/modern_university.jpg'
 </script>
