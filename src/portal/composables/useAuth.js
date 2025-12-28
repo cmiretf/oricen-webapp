@@ -66,11 +66,24 @@ export function useAuth() {
   const loginWithGoogle = async () => {
     try {
       error.value = null
+      loading.value = true
       const provider = new GoogleAuthProvider()
+      // Forzar selección de cuenta para debug
+      provider.setCustomParameters({ prompt: 'select_account' })
       await signInWithPopup(auth, provider)
     } catch (err) {
-      console.error('Login error:', err)
-      error.value = err.message
+      console.error('Login error details:', err)
+      if (err.code === 'auth/popup-blocked') {
+        error.value = 'El navegador bloqueó la ventana emergente. Por favor, permítela e inténtalo de nuevo.'
+      } else if (err.code === 'auth/operation-not-allowed') {
+        error.value = 'El inicio de sesión con Google no está habilitado en la consola de Firebase.'
+      } else if (err.code === 'auth/unauthorized-domain') {
+        error.value = 'Este dominio no está autorizado en la consola de Firebase.'
+      } else {
+        error.value = `Error al iniciar sesión: ${err.message}`
+      }
+    } finally {
+      loading.value = false
     }
   }
 
