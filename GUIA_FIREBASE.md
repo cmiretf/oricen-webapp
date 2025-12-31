@@ -32,11 +32,33 @@ Esta guia te explica paso a paso como configurar Firebase para el modulo de port
 
 ## Paso 4: Configurar dominios autorizados
 
+**IMPORTANTE**: Este paso es necesario para poder usar browser tab y autenticación con redirect.
+
 1. Dentro de Authentication, ve a la pestana **"Settings"** (Configuracion)
 2. Busca la seccion **"Authorized domains"** (Dominios autorizados)
-3. Haz clic en **"Add domain"** y agrega la URL de tu Replit:
-   - Para desarrollo: La URL que aparece en la barra de direcciones cuando ejecutas tu app (algo como `xxxx.replit.dev`)
-   - Para produccion: Tu dominio personalizado o la URL de despliegue
+3. Haz clic en **"Add domain"** y agrega los siguientes dominios:
+
+   **Para desarrollo local:**
+   - `localhost` (sin http:// ni puerto)
+   - `127.0.0.1` (si usas esta IP)
+   
+   **Para Replit:**
+   - La URL que aparece en la barra de direcciones cuando ejecutas tu app (algo como `xxxx.replit.dev`)
+   - Solo el dominio, sin `https://` ni rutas (ejemplo: `oricen-webapp.xxxx.replit.dev`)
+   
+   **Para produccion:**
+   - Tu dominio personalizado (ejemplo: `tudominio.com`)
+   - El dominio de Firebase Hosting si lo usas (ejemplo: `tuproyecto.web.app`)
+
+4. **Para browser tab específicamente**, asegurate de agregar:
+   - El dominio completo donde se ejecuta tu aplicación
+   - Si usas puertos personalizados, Firebase generalmente acepta `localhost` sin especificar el puerto
+   - Para aplicaciones móviles o deep linking, también necesitaras configurar los esquemas de URL correspondientes
+
+**Nota**: Los cambios pueden tardar unos minutos en aplicarse. Si ves el error `auth/unauthorized-domain`, verifica que:
+- El dominio esté exactamente como aparece en la URL del navegador (sin protocolo, sin rutas)
+- No haya espacios o caracteres especiales
+- Hayas guardado los cambios correctamente
 
 ## Paso 5: Crear la base de datos Firestore
 
