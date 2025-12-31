@@ -171,6 +171,59 @@ service cloud.firestore {
 
 3. Haz clic en **"Publicar"**
 
+## Paso 6.5: Crear índices compuestos en Firestore
+
+Cuando usas consultas que combinan filtros (`where`) con ordenamiento (`orderBy`), Firestore requiere índices compuestos. Si ves un error en la consola del navegador que dice "The query requires an index", sigue estos pasos:
+
+### Método 1: Usar el enlace directo del error (Más rápido)
+
+1. Cuando veas el error en la consola del navegador, copia la URL completa que aparece después del mensaje
+2. Abre esa URL en una nueva pestaña
+3. Se abrirá automáticamente la página de creación de índice en Firebase Console
+4. Haz clic en **"Crear índice"** o **"Create index"**
+5. Espera a que el índice se cree (puede tardar unos minutos)
+
+### Método 2: Crear el índice manualmente
+
+Si prefieres hacerlo manualmente o necesitas crear otros índices:
+
+1. En Firebase Console, ve a **"Build"** > **"Firestore Database"**
+2. Haz clic en la pestaña **"Indexes"** (Índices)
+3. Haz clic en **"Create Index"** (Crear índice)
+4. Configura el índice según la consulta que necesitas:
+
+   **Para la colección `documents` (documentos de usuarios):**
+   - **Collection ID**: `documents`
+   - **Fields to index**:
+     - Campo 1: `userId` - Tipo: `Ascending`
+     - Campo 2: `createdAt` - Tipo: `Descending`
+   - Haz clic en **"Create"**
+
+   **Para la colección `evaluations` (evaluaciones):**
+   - **Collection ID**: `evaluations`
+   - **Fields to index**:
+     - Campo 1: `userId` - Tipo: `Ascending`
+     - Campo 2: `createdAt` - Tipo: `Descending`
+   - Haz clic en **"Create"**
+
+   **Para la colección `appointments` (citas):**
+   - **Collection ID**: `appointments`
+   - **Fields to index**:
+     - Campo 1: `userId` - Tipo: `Ascending`
+     - Campo 2: `date` - Tipo: `Ascending`
+   - Haz clic en **"Create"**
+
+   **Para la colección `reports` (informes):**
+   - **Collection ID**: `reports`
+   - **Fields to index**:
+     - Campo 1: `userId` - Tipo: `Ascending`
+     - Campo 2: `createdAt` - Tipo: `Descending`
+   - Haz clic en **"Create"**
+
+5. Espera a que el estado del índice cambie de "Building" a "Enabled" (puede tardar unos minutos)
+
+**Nota importante**: Los índices se crean automáticamente cuando Firebase detecta que son necesarios, pero a veces es más rápido crearlos manualmente. Una vez creados, estarán disponibles para todas las consultas que los necesiten.
+
 ## Paso 7: Configurar Storage
 
 1. En el menu lateral, ve a **"Build"** > **"Storage"**

@@ -33,6 +33,13 @@
           <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B4C7E] mx-auto"></div>
         </div>
 
+        <div v-else-if="error" class="p-6 text-center">
+          <p class="text-red-600 mb-2">{{ error }}</p>
+          <button @click="loadDocuments" class="text-[#2B4C7E] hover:underline text-sm">
+            Intentar de nuevo
+          </button>
+        </div>
+
         <div v-else-if="documents.length === 0" class="p-6 text-center text-gray-500">
           No hay documentos todavía
         </div>
@@ -68,25 +75,46 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { useAuth } from '../composables/useAuth'
 import { documentService } from '../services/documentService'
 import PortalHeader from '../components/PortalHeader.vue'
 
-const { user, initAuth } = useAuth()
+const { user, initAuth, loading: authLoading } = useAuth()
 initAuth()
 
 const documents = ref([])
 const loadingDocs = ref(true)
 const uploading = ref(false)
+const error = ref(null)
 
 const loadDocuments = async () => {
-  if (user.value) {
+  if (!user.value) {
+    loadingDocs.value = false
+    return
+  }
+
+  try {
     loadingDocs.value = true
+    error.value = null
     documents.value = await documentService.getUserDocuments(user.value.uid)
+  } catch (err) {
+    console.error('Error loading documents:', err)
+    error.value = err.message || 'Error al cargar los documentos'
+    documents.value = []
+  } finally {
     loadingDocs.value = false
   }
 }
+
+// Cargar documentos cuando el usuario esté disponible
+watch([user, authLoading], ([newUser, newLoading]) => {
+  if (!newLoading && newUser) {
+    loadDocuments()
+  } else if (!newLoading && !newUser) {
+    loadingDocs.value = false
+  }
+}, { immediate: true })
 
 const handleFileUpload = async (event) => {
   const file = event.target.files[0]
@@ -98,8 +126,10 @@ const handleFileUpload = async (event) => {
     await loadDocuments()
   } catch (err) {
     console.error('Upload error:', err)
+    error.value = err.message || 'Error al subir el documento'
+  } finally {
+    uploading.value = false
   }
-  uploading.value = false
 }
 
 const formatDate = (timestamp) => {
@@ -120,5 +150,5 @@ const getStatusText = (status) => ({
   rejected: 'Rechazado'
 }[status] || status)
 
-onMounted(loadDocuments)
+// onMounted ya no es necesario porque usamos watch
 </script>
