@@ -1,17 +1,39 @@
 <template>
-  <Header v-if="!isPortalRoute" />
+  <Header v-if="showPublicLayout" />
   <router-view />
-  <Footer v-if="!isPortalRoute" />
+  <Footer v-if="showPublicLayout" />
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import Header from './components/Header.vue'
-import Footer from './components/Footer.vue'
+import { computed, ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { auth } from "./portal/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
 
-const route = useRoute()
-const isPortalRoute = computed(() => {
-  return route.path.startsWith('/portal') || route.path.startsWith('/admin')
-})
+const route = useRoute();
+const isAuthenticated = ref(false);
+
+onMounted(() => {
+  onAuthStateChanged(auth, (user) => {
+    isAuthenticated.value = !!user;
+  });
+});
+
+const showPublicLayout = computed(() => {
+  const path = route.path;
+  const isPortalRoute = path.startsWith("/portal");
+  const isAdminRoute = path.startsWith("/admin");
+
+  if (isPortalRoute || isAdminRoute) {
+    return false;
+  }
+
+  if (isAuthenticated.value) {
+    return false;
+  }
+
+  return true;
+});
 </script>

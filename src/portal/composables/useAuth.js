@@ -5,6 +5,8 @@ import {
   signInWithRedirect,
   getRedirectResult,
   GoogleAuthProvider, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut, 
   onAuthStateChanged 
 } from 'firebase/auth'
@@ -22,7 +24,6 @@ export function useAuth() {
   const initAuth = () => {
     console.log('initAuth called')
     
-    // Verificar resultado de redirect en background (no bloquear)
     getRedirectResult(auth)
       .then((result) => {
         if (result) {
@@ -67,11 +68,15 @@ export function useAuth() {
     const newProfile = {
       uid,
       email: user.value.email,
-      displayName: user.value.displayName,
-      photoURL: user.value.photoURL,
+      displayName: user.value.displayName || user.value.email?.split('@')[0] || 'Usuario',
+      photoURL: user.value.photoURL || null,
       role: 'user',
-      serviceType: null,
-      status: 'active',
+      service: null,
+      status: {
+        documents: 'pending',
+        forms: 'pending',
+        evaluation: 'pending'
+      },
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     }
@@ -82,14 +87,13 @@ export function useAuth() {
 
   const loginWithGoogle = async () => {
     try {
-      console.log('Iniciando login con Google usando redirect...')
+      console.log('Iniciando login con Google usando popup...')
       error.value = null
       loading.value = true
       const provider = new GoogleAuthProvider()
       provider.setCustomParameters({ prompt: 'select_account' })
       
-      // Usar redirect directamente para evitar problemas con popups bloqueados en iframes
-      await signInWithRedirect(auth, provider)
+      await signInWithPopup(auth, provider)
     } catch (err) {
       console.error('Login error details:', err)
       loading.value = false
@@ -97,9 +101,59 @@ export function useAuth() {
         error.value = 'El inicio de sesión con Google no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
       } else if (err.code === 'auth/unauthorized-domain') {
         error.value = 'Este dominio no está autorizado en Firebase (Authentication > Settings > Authorized domains).'
+      } else if (err.code === 'auth/popup-blocked') {
+        error.value = 'El navegador bloqueó la ventana emergente. Por favor, permite las ventanas emergentes para este sitio.'
       } else {
         error.value = `Error: ${err.message}`
       }
+    }
+  }
+
+  const loginWithEmail = async (email, password) => {
+    try {
+      console.log('Iniciando login con email...')
+      error.value = null
+      await signInWithEmailAndPassword(auth, email, password)
+    } catch (err) {
+      console.error('Login error details:', err)
+      if (err.code === 'auth/operation-not-allowed') {
+        error.value = 'El inicio de sesión con email y contraseña no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
+      } else if (err.code === 'auth/user-not-found') {
+        error.value = 'No existe una cuenta con este correo electrónico.'
+      } else if (err.code === 'auth/wrong-password') {
+        error.value = 'Contraseña incorrecta.'
+      } else if (err.code === 'auth/invalid-email') {
+        error.value = 'El correo electrónico no es válido.'
+      } else if (err.code === 'auth/invalid-credential') {
+        error.value = 'Credenciales inválidas. Verifica tu correo y contraseña.'
+      } else if (err.code === 'auth/too-many-requests') {
+        error.value = 'Demasiados intentos fallidos. Intenta más tarde.'
+      } else {
+        error.value = `Error: ${err.message}`
+      }
+      throw err
+    }
+  }
+
+  const registerWithEmail = async (email, password) => {
+    try {
+      console.log('Registrando usuario con email...')
+      error.value = null
+      await createUserWithEmailAndPassword(auth, email, password)
+    } catch (err) {
+      console.error('Registration error details:', err)
+      if (err.code === 'auth/operation-not-allowed') {
+        error.value = 'El inicio de sesión con email y contraseña no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
+      } else if (err.code === 'auth/email-already-in-use') {
+        error.value = 'Ya existe una cuenta con este correo electrónico.'
+      } else if (err.code === 'auth/invalid-email') {
+        error.value = 'El correo electrónico no es válido.'
+      } else if (err.code === 'auth/weak-password') {
+        error.value = 'La contraseña es demasiado débil. Usa al menos 6 caracteres.'
+      } else {
+        error.value = `Error: ${err.message}`
+      }
+      throw err
     }
   }
 
@@ -137,6 +191,8 @@ export function useAuth() {
     loading,
     error,
     loginWithGoogle,
+    loginWithEmail,
+    registerWithEmail,
     logout,
     isAdmin,
     isUser,

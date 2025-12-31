@@ -118,8 +118,30 @@ src/portal/
     └── AdminAppointments.vue# Appointment management
 ```
 
+### Authentication Methods
+- **Google Sign-In**: OAuth popup authentication
+- **Email + Password**: Traditional login and registration
+
+### User Document Structure (Firestore)
+```json
+{
+  "uid": "string",
+  "email": "string",
+  "displayName": "string",
+  "role": "user | admin",
+  "service": "A | B | C",
+  "status": {
+    "documents": "pending | approved",
+    "forms": "pending | completed",
+    "evaluation": "pending | completed"
+  },
+  "createdAt": "timestamp",
+  "updatedAt": "timestamp"
+}
+```
+
 ### Portal URLs
-- `/portal/login` - Login with Google
+- `/portal/login` - Login with Google or Email/Password
 - `/portal` - User personal area
 - `/portal/documentos` - Documents section
 - `/portal/formularios` - Forms section
@@ -146,10 +168,26 @@ Secrets needed (see GUIA_FIREBASE.md):
 ## External Dependencies
 - **Firebase** - Authentication, Firestore database, Storage
 
+### Admin Full Control
+The admin has complete access to all system features:
+- View, create, edit, and delete appointments
+- Manage all users and their services
+- Upload personalized content for each user
+- Full access to documents, forms, evaluations, and reports
+
+### Conditional Layout Rendering
+- **Public users**: See Header + Footer with public navigation
+- **Authenticated users**: Portal/Admin routes hide public navigation
+- App.vue conditionally renders layout based on auth state and route
+
 ## Recent Changes
 - Migrated entire application from React to Vue.js 3
 - All components rewritten using Vue 3 Composition API with `<script setup>`
 - Vue Router v4 configured for client-side routing
 - Lucide Vue Next for icons
 - Same design, functionality, and pages maintained
-- **NEW**: Added complete Firebase portal module with user/admin areas
+- Added complete Firebase portal module with user/admin areas
+- **Dec 2024**: Added email/password authentication (login + registration)
+- **Dec 2024**: Fixed user profile structure with proper status object
+- **Dec 2024**: Admin can now create, edit, and delete appointments
+- **Dec 2024**: Fixed conditional layout - public header/footer hidden when authenticated
