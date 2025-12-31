@@ -116,7 +116,9 @@ export function useAuth() {
       await signInWithEmailAndPassword(auth, email, password)
     } catch (err) {
       console.error('Login error details:', err)
-      if (err.code === 'auth/user-not-found') {
+      if (err.code === 'auth/operation-not-allowed') {
+        error.value = 'El inicio de sesión con email y contraseña no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
+      } else if (err.code === 'auth/user-not-found') {
         error.value = 'No existe una cuenta con este correo electrónico.'
       } else if (err.code === 'auth/wrong-password') {
         error.value = 'Contraseña incorrecta.'
@@ -140,7 +142,9 @@ export function useAuth() {
       await createUserWithEmailAndPassword(auth, email, password)
     } catch (err) {
       console.error('Registration error details:', err)
-      if (err.code === 'auth/email-already-in-use') {
+      if (err.code === 'auth/operation-not-allowed') {
+        error.value = 'El inicio de sesión con email y contraseña no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
+      } else if (err.code === 'auth/email-already-in-use') {
         error.value = 'Ya existe una cuenta con este correo electrónico.'
       } else if (err.code === 'auth/invalid-email') {
         error.value = 'El correo electrónico no es válido.'
