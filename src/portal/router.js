@@ -5,6 +5,7 @@ import UserForms from './pages/UserForms.vue'
 import UserEvaluation from './pages/UserEvaluation.vue'
 import UserAppointments from './pages/UserAppointments.vue'
 import UserReports from './pages/UserReports.vue'
+import UserProfile from './pages/UserProfile.vue'
 import AdminDashboard from './pages/AdminDashboard.vue'
 import AdminUsers from './pages/AdminUsers.vue'
 import AdminUserDetail from './pages/AdminUserDetail.vue'
@@ -19,6 +20,7 @@ export const portalRoutes = [
   { path: '/portal/evaluacion', component: UserEvaluation, meta: { requiresAuth: true } },
   { path: '/portal/citas', component: UserAppointments, meta: { requiresAuth: true } },
   { path: '/portal/informes', component: UserReports, meta: { requiresAuth: true } },
+  { path: '/portal/perfil', component: UserProfile, meta: { requiresAuth: true } },
   { 
     path: '/admin', 
     component: AdminDashboard, 

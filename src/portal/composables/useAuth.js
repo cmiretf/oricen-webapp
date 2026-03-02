@@ -71,7 +71,7 @@ export function useAuth() {
       displayName: user.value.displayName || user.value.email?.split('@')[0] || 'Usuario',
       photoURL: user.value.photoURL || null,
       role: 'user',
-      service: null,
+      serviceType: null,
       status: {
         documents: 'pending',
         forms: 'pending',
