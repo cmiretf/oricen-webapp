@@ -22,21 +22,12 @@ export function useAuth() {
   let unsubscribe = null
 
   const initAuth = () => {
-    console.log('initAuth called')
-    
     getRedirectResult(auth)
-      .then((result) => {
-        if (result) {
-          console.log('Redirect result received:', result.user.email)
-        }
-      })
       .catch((err) => {
-        console.error('Redirect result error:', err)
         error.value = err.message
       })
-    
+
     unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      console.log('Auth state changed:', firebaseUser?.email || 'no user')
       if (firebaseUser) {
         user.value = firebaseUser
         await loadUserProfile(firebaseUser.uid)
@@ -59,7 +50,6 @@ export function useAuth() {
         await createUserProfile(uid)
       }
     } catch (err) {
-      console.error('Error loading user profile:', err)
       error.value = err.message
     }
   }
@@ -87,7 +77,6 @@ export function useAuth() {
 
   const loginWithGoogle = async () => {
     try {
-      console.log('Iniciando login con Google usando popup...')
       error.value = null
       loading.value = true
       const provider = new GoogleAuthProvider()
@@ -95,7 +84,6 @@ export function useAuth() {
       
       await signInWithPopup(auth, provider)
     } catch (err) {
-      console.error('Login error details:', err)
       loading.value = false
       if (err.code === 'auth/operation-not-allowed') {
         error.value = 'El inicio de sesión con Google no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
@@ -111,11 +99,9 @@ export function useAuth() {
 
   const loginWithEmail = async (email, password) => {
     try {
-      console.log('Iniciando login con email...')
       error.value = null
       await signInWithEmailAndPassword(auth, email, password)
     } catch (err) {
-      console.error('Login error details:', err)
       if (err.code === 'auth/operation-not-allowed') {
         error.value = 'El inicio de sesión con email y contraseña no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
       } else if (err.code === 'auth/user-not-found') {
@@ -137,11 +123,9 @@ export function useAuth() {
 
   const registerWithEmail = async (email, password) => {
     try {
-      console.log('Registrando usuario con email...')
       error.value = null
       await createUserWithEmailAndPassword(auth, email, password)
     } catch (err) {
-      console.error('Registration error details:', err)
       if (err.code === 'auth/operation-not-allowed') {
         error.value = 'El inicio de sesión con email y contraseña no está habilitado en la consola de Firebase (Authentication > Sign-in method).'
       } else if (err.code === 'auth/email-already-in-use') {
@@ -164,7 +148,6 @@ export function useAuth() {
       userRole.value = null
       userProfile.value = null
     } catch (err) {
-      console.error('Logout error:', err)
       error.value = err.message
     }
   }

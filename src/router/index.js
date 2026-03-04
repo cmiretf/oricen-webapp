@@ -11,7 +11,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 
 const routes = [
-  { path: '/', component: HomePage },
+  { path: '/', redirect: '/portal/login' },
   { path: '/quienes-somos', component: QuienesSomosPage },
   { path: '/servicios', component: ServiciosPage },
   { path: '/contacto', component: ContactoPage },

@@ -35,34 +35,6 @@
       </div>
     </div>
 
-    <div class="flex-1 flex items-center justify-center p-6 md:p-12">
-      <div class="max-w-md w-full">
-        <div class="md:hidden text-center mb-8">
-          <img :src="logo" alt="Oricen Logo" class="h-16 w-auto mx-auto" />
-        </div>
-
-        <div class="mb-10 text-center md:text-left">
-          <h2 class="text-3xl font-bold text-gray-900">
-            {{ isRegisterMode ? "Crear cuenta" : "Bienvenido de nuevo" }}
-          </h2>
-          <p class="text-gray-500 mt-2">
-            {{
-              isRegisterMode
-                ? "Regístrate para comenzar tu proceso."
-                : "Ingresa a tu cuenta para continuar con tu proceso."
-            }}
-          </p>
-        </div>
-        <p class="text-white text-lg opacity-90 max-w-md">
-          Accede a tu portal personal para gestionar tus citas, documentos y
-          seguimiento terapéutico de forma segura.
-        </p>
-      </div>
-      <p class="text-white text-sm opacity-75">
-        © 2024 Oricen Salud Mental • Privacidad Protegida
-      </p>
-    </div>
-
     <!-- Right Panel - Light Grey/White -->
     <div
       class="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center py-12 px-4"
@@ -253,8 +225,6 @@
 import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../composables/useAuth";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
 import logo from "../../assets/logo.avif";
 
 const router = useRouter();
@@ -277,10 +247,8 @@ const password = ref("");
 const confirmPassword = ref("");
 
 onMounted(() => {
-  console.log("PortalLogin mounted");
   initAuth();
   isLoading.value = false;
-  console.log("PortalLogin ready");
 });
 
 const toggleMode = () => {
@@ -315,7 +283,6 @@ const handleEmailAuth = async () => {
 };
 
 const onGoogleClick = async () => {
-  console.log("=== CLICK DETECTADO ===");
   try {
     isLoading.value = true;
     errorMsg.value = null;
@@ -328,7 +295,6 @@ const onGoogleClick = async () => {
 };
 
 watch([user, userRole], ([newUser, newRole]) => {
-  console.log("Auth state changed:", { user: newUser?.email, role: newRole });
   if (newUser && newRole) {
     if (newRole === "admin") {
       router.push("/admin");
