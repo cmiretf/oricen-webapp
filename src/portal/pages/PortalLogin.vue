@@ -41,6 +41,7 @@
     >
       <div class="max-w-md w-full">
         <div class="bg-white rounded-lg shadow-lg p-8">
+          <p class="text-xs text-red-500 font-bold mb-2">carlos testing ✓</p>
           <h2 class="text-3xl font-bold text-gray-900 mb-2">
             Bienvenido de nuevo
           </h2>
