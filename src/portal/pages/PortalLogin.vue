@@ -72,6 +72,9 @@
           <h2 class="text-3xl font-bold text-gray-900 mb-2">
             Bienvenido de nuevo
           </h2>
+          <p class="text-green-600 font-semibold mb-2">
+            Hola Carlos, está funcionando desde el móvil ✓
+          </p>
           <p class="text-gray-600 mb-8">
             Ingresa a tu cuenta para continuar con tu proceso.
           </p>
