@@ -52,6 +52,11 @@ router.beforeEach(async (to, from, next) => {
   const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
   const isLoginPage = to.path === '/portal/login'
 
+  if (!requiresAuth && !isLoginPage) {
+    next()
+    return
+  }
+
   const user = await waitForAuth()
 
   if (isLoginPage) {
@@ -61,11 +66,6 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next()
     }
-    return
-  }
-
-  if (!requiresAuth) {
-    next()
     return
   }
 
