@@ -41,6 +41,7 @@
     >
       <div class="max-w-md w-full">
         <div class="bg-white rounded-lg shadow-lg p-8">
+          <p class="animate-pulse text-2xl font-bold text-red-600 mb-4">TESTING</p>
           <h2 class="text-3xl font-bold text-gray-900 mb-2">
             Bienvenido de nuevo
           </h2>
