@@ -41,7 +41,7 @@
       <aside
         :class="[
           'fixed md:sticky top-0 md:top-[57px] left-0 z-30 md:z-0',
-          'w-64 bg-white border-r border-gray-200 md:min-h-[calc(100vh-57px)] h-full md:h-auto',
+          'w-64 bg-white border-r border-gray-200 md:min-h-[calc(100dvh-57px)] h-full md:h-auto',
           'transform transition-transform duration-200 md:transform-none',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         ]"

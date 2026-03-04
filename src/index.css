@@ -10,6 +10,13 @@
 
 html {
   scroll-behavior: smooth;
+  /* Fix 100vh on mobile Chrome: address bar causes layout issues */
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  min-height: 100dvh;
 }
 
 body {
@@ -18,6 +25,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Override screen-height classes to use dvh (dynamic viewport) on mobile */
+@layer utilities {
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .h-screen {
+    height: 100vh;
+    height: 100dvh;
+  }
 }
 
 @layer components {
