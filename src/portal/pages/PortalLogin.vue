@@ -240,17 +240,12 @@ const {
   initAuth,
 } = useAuth();
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 const errorMsg = ref(null);
 const isRegisterMode = ref(false);
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
-
-onMounted(() => {
-  initAuth();
-  isLoading.value = false;
-});
 
 const toggleMode = () => {
   isRegisterMode.value = !isRegisterMode.value;
