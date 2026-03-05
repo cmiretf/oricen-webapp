@@ -50,14 +50,25 @@ const getUserRole = async (uid) => {
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
+  const isLoginPage = to.path === '/portal/login'
 
-  if (!requiresAuth) {
+  if (!requiresAuth && !isLoginPage) {
     next()
     return
   }
 
   const user = await waitForAuth()
-  
+
+  if (isLoginPage) {
+    if (user) {
+      const role = await getUserRole(user.uid)
+      next(role === 'admin' ? '/admin' : '/portal')
+    } else {
+      next()
+    }
+    return
+  }
+
   if (!user) {
     next('/portal/login')
     return

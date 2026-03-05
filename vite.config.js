@@ -10,6 +10,6 @@ export default defineConfig({
     allowedHosts: true
   },
   build: {
-    target: 'es2022'
+    target: ['es2019', 'safari13']
   }
 })

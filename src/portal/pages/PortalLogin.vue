@@ -41,6 +41,7 @@
     >
       <div class="max-w-md w-full">
         <div class="bg-white rounded-lg shadow-lg p-8">
+          <p class="animate-pulse text-2xl font-bold text-orange-500 mb-4">⚠️ TESTING CARLOS ⚠️</p>
           <h2 class="text-3xl font-bold text-gray-900 mb-2">
             Bienvenido de nuevo
           </h2>
@@ -239,17 +240,12 @@ const {
   initAuth,
 } = useAuth();
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 const errorMsg = ref(null);
 const isRegisterMode = ref(false);
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
-
-onMounted(() => {
-  initAuth();
-  isLoading.value = false;
-});
 
 const toggleMode = () => {
   isRegisterMode.value = !isRegisterMode.value;

@@ -16,7 +16,7 @@
     </header>
 
     <div class="flex">
-      <aside class="w-64 bg-white shadow-sm min-h-[calc(100vh-72px)]">
+      <aside class="w-64 bg-white shadow-sm min-h-[calc(100dvh-72px)]">
         <nav class="p-4 space-y-1">
           <router-link 
             to="/admin" 
