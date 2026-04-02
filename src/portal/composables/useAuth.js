@@ -17,6 +17,7 @@ const userRole = ref(null)
 const userProfile = ref(null)
 const loading = ref(true)
 const error = ref(null)
+const googleAccessToken = ref(null)
 
 export function useAuth() {
   let unsubscribe = null
@@ -80,9 +81,15 @@ export function useAuth() {
       error.value = null
       loading.value = true
       const provider = new GoogleAuthProvider()
+      provider.addScope('https://www.googleapis.com/auth/calendar')
+      provider.addScope('https://www.googleapis.com/auth/calendar.events')
       provider.setCustomParameters({ prompt: 'select_account' })
-      
-      await signInWithPopup(auth, provider)
+
+      const result = await signInWithPopup(auth, provider)
+      const credential = GoogleAuthProvider.credentialFromResult(result)
+      if (credential?.accessToken) {
+        googleAccessToken.value = credential.accessToken
+      }
     } catch (err) {
       loading.value = false
       if (err.code === 'auth/operation-not-allowed') {
@@ -173,6 +180,7 @@ export function useAuth() {
     userProfile,
     loading,
     error,
+    googleAccessToken,
     loginWithGoogle,
     loginWithEmail,
     registerWithEmail,

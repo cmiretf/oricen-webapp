@@ -18,7 +18,8 @@ const routes = [
   { path: '/comprar', component: ComprarPage },
   { path: '/login', redirect: '/portal/login' },
   { path: '/politica-privacidad', component: PoliticaPrivacidadPage },
-  ...portalRoutes
+  ...portalRoutes,
+  { path: '/:pathMatch(.*)*', redirect: '/portal/login' }
 ]
 
 const router = createRouter({

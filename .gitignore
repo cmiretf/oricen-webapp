@@ -31,6 +31,9 @@ agent_instructions.md
 actual_rules.md
 GUIA_*
 SOLUCION_*
+CONFIGURAR_*
+CLAUDE.md
+replit.md
 
 src/portal/firebase.config.local.js
 docs/

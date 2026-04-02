@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, watch } from 'vue'
 import { useAuth } from '../composables/useAuth'
 import { formService } from '../services/formService'
 import UserPortalLayout from '../components/UserPortalLayout.vue'
@@ -101,16 +101,19 @@ const activeForm = ref(null)
 const formResponses = reactive({})
 
 const loadForms = async () => {
-  if (user.value && userProfile.value?.serviceType) {
-    loading.value = true
-    forms.value = await formService.getFormsByService(userProfile.value.serviceType)
-    responses.value = await formService.getUserFormResponses(user.value.uid)
-    forms.value.forEach(form => {
-      const existingResponse = responses.value.find(r => r.formId === form.id)
-      formResponses[form.id] = existingResponse?.responses || {}
-    })
+  if (!user.value) return
+  if (!userProfile.value?.serviceType) {
     loading.value = false
+    return
   }
+  loading.value = true
+  forms.value = await formService.getFormsByService(userProfile.value.serviceType)
+  responses.value = await formService.getUserFormResponses(user.value.uid)
+  forms.value.forEach(form => {
+    const existingResponse = responses.value.find(r => r.formId === form.id)
+    formResponses[form.id] = existingResponse?.responses || {}
+  })
+  loading.value = false
 }
 
 const openForm = (form) => {
@@ -149,4 +152,5 @@ const getFormProgressText = (form) => {
 }
 
 onMounted(loadForms)
+watch([user, userProfile], () => loadForms())
 </script>

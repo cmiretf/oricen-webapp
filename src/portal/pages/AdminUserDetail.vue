@@ -31,6 +31,7 @@
       </div>
 
       <div class="space-y-3">
+        <!-- DOCUMENTOS -->
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <button @click="toggleSection('documents')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
             <div class="flex items-center gap-3">
@@ -79,6 +80,7 @@
           </div>
         </div>
 
+        <!-- FORMULARIOS -->
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <button @click="toggleSection('forms')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
             <div class="flex items-center gap-3">
@@ -86,41 +88,60 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <span class="font-bold text-gray-900">Formularios</span>
-              <span class="text-sm text-gray-500">({{ formResponses.length }})</span>
+              <span class="text-sm text-gray-500">({{ forms.length }})</span>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" :class="openSections.forms ? 'rotate-180' : ''" class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           <div v-if="openSections.forms" class="border-t border-gray-200 p-5">
-            <div v-if="formResponses.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div v-for="response in formResponses" :key="response.id" class="border border-gray-200 rounded-lg p-4">
-                <h4 class="font-bold text-gray-900 mb-2">{{ getFormTitle(response.formId) }}</h4>
-                <div class="mb-3">
-                  <div class="flex items-center gap-2 mb-1">
-                    <div class="flex-1 bg-gray-200 rounded-full h-2">
-                      <div :class="response.status === 'completed' ? 'bg-green-500' : 'bg-yellow-500'" class="h-2 rounded-full" style="width: 100%"></div>
-                    </div>
-                    <span :class="response.status === 'completed' ? 'text-green-600' : 'text-yellow-600'" class="text-sm font-medium">
-                      {{ response.status === 'completed' ? '100% Completado' : 'En progreso' }}
-                    </span>
+            <div v-if="forms.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div v-for="form in forms" :key="form.id" class="border border-gray-200 rounded-lg p-5">
+                <div class="flex items-start gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    :class="getFormIcon(form).bg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" :class="getFormIcon(form).text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path v-if="isParentForm(form)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h4 class="font-bold text-gray-900 text-sm">{{ form.title }}</h4>
+                    <p v-if="form.description" class="text-xs text-gray-500 mt-0.5">{{ form.description }}</p>
                   </div>
                 </div>
-                <button @click="toggleFormResponses(response.id)" class="text-[#2B4C7E] hover:text-[#1a3a61] text-sm font-medium">
-                  {{ expandedForms[response.id] ? 'Ocultar Respuestas' : 'Ver Respuestas' }}
-                </button>
-                <div v-if="expandedForms[response.id] && response.responses" class="mt-3 space-y-2 border-t pt-3">
-                  <div v-for="(answer, question) in response.responses" :key="question" class="text-sm">
-                    <p class="font-medium text-gray-700">{{ question }}:</p>
-                    <p class="text-gray-600">{{ answer }}</p>
+
+                <div class="mb-3">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium" :class="getFormCompletionClass(form)">
+                      {{ getFormCompletionPercent(form) }}% {{ getFormResponse(form)?.status === 'completed' ? 'Completado' : 'Pendiente' }}
+                    </span>
+                    <span class="text-xs text-gray-500">({{ getFormAnsweredCount(form) }}/{{ form.fields?.length || 0 }} preguntas)</span>
                   </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="h-2 rounded-full transition-all" :class="getFormResponse(form)?.status === 'completed' ? 'bg-green-500' : 'bg-yellow-500'" :style="{ width: getFormCompletionPercent(form) + '%' }"></div>
+                  </div>
+                </div>
+
+                <button @click="toggleFormResponses(form.id)" class="text-sm font-medium transition-colors"
+                  :class="getFormResponse(form)?.status === 'completed' ? 'text-green-700 hover:text-green-800' : 'text-yellow-700 hover:text-yellow-800'">
+                  {{ expandedForms[form.id] ? 'Ocultar' : (getFormResponse(form)?.status === 'completed' ? 'Ver Respuestas' : 'Ver Progreso Parcial') }}
+                </button>
+
+                <div v-if="expandedForms[form.id]" class="mt-3 space-y-2 border-t pt-3">
+                  <div v-if="getFormResponse(form)" v-for="field in form.fields" :key="field.name" class="text-sm">
+                    <p class="font-medium text-gray-700">{{ field.label }}:</p>
+                    <p class="text-gray-600">{{ getFormResponse(form).responses?.[field.name] || '—' }}</p>
+                  </div>
+                  <p v-else class="text-sm text-gray-500">Sin respuestas todavía</p>
                 </div>
               </div>
             </div>
-            <p v-else class="text-gray-500 text-sm">No hay formularios completados</p>
+            <p v-else class="text-gray-500 text-sm">No hay formularios disponibles</p>
           </div>
         </div>
 
+        <!-- EVALUACION -->
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <button @click="toggleSection('evaluation')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
             <div class="flex items-center gap-3">
@@ -134,22 +155,30 @@
             </svg>
           </button>
           <div v-if="openSections.evaluation" class="border-t border-gray-200 p-5 space-y-4">
-            <div v-for="evalType in evaluationTypes" :key="evalType.key" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-gray-200">
-                  <span class="text-lg">{{ evalType.icon }}</span>
+            <div v-for="evalType in evaluationTypes" :key="evalType.key" class="p-4 bg-gray-50 rounded-lg">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-gray-200">
+                    <span class="text-lg">{{ evalType.icon }}</span>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-900">{{ evalType.title }}</p>
+                    <p class="text-sm text-gray-500">{{ evalType.description }}</p>
+                  </div>
                 </div>
                 <div>
-                  <p class="font-medium text-gray-900">{{ evalType.title }}</p>
-                  <p class="text-sm text-gray-500">{{ evalType.description }}</p>
+                  <input type="file" :ref="el => evalInputs[evalType.key] = el" @change="uploadEvalFile($event, evalType)" class="hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+                  <button @click="evalInputs[evalType.key]?.click()" class="px-4 py-2 bg-[#2B4C7E] text-white rounded-lg text-sm font-medium hover:bg-[#1a3a61] transition-colors flex items-center gap-2" :disabled="uploadingEval === evalType.key">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                    {{ uploadingEval === evalType.key ? 'Subiendo...' : 'Subir Archivo' }}
+                  </button>
                 </div>
               </div>
-              <div>
-                <input type="file" :ref="el => evalInputs[evalType.key] = el" @change="uploadEvalFile($event, evalType)" class="hidden" />
-                <button @click="evalInputs[evalType.key]?.click()" class="px-4 py-2 bg-[#2B4C7E] text-white rounded-lg text-sm font-medium hover:bg-[#1a3a61] transition-colors flex items-center gap-2" :disabled="uploadingEval === evalType.key">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                  {{ uploadingEval === evalType.key ? 'Subiendo...' : 'Subir Archivo' }}
-                </button>
+              <div v-if="getEvalFilesByCategory(evalType.key).length > 0" class="mt-3 space-y-1">
+                <div v-for="evalFile in getEvalFilesByCategory(evalType.key)" :key="evalFile.id" class="flex items-center justify-between p-2 bg-white rounded border border-gray-200">
+                  <span class="text-sm text-gray-700 truncate">{{ evalFile.fileName || evalFile.title }}</span>
+                  <a v-if="evalFile.downloadURL" :href="evalFile.downloadURL" target="_blank" class="text-[#2B4C7E] hover:text-[#1a3a61] text-sm font-medium flex-shrink-0 ml-2">Descargar</a>
+                </div>
               </div>
             </div>
 
@@ -174,6 +203,7 @@
           </div>
         </div>
 
+        <!-- ENTREVISTA -->
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <button @click="toggleSection('interview')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
             <div class="flex items-center gap-3">
@@ -188,6 +218,7 @@
           </button>
         </div>
 
+        <!-- INFORME FINAL -->
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <button @click="toggleSection('report')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
             <div class="flex items-center gap-3">
@@ -254,6 +285,7 @@ const userDetail = ref(null)
 const documents = ref([])
 const accessKeys = ref([])
 const reports = ref([])
+const evaluationFiles = ref([])
 const formResponses = ref([])
 const forms = ref([])
 const loading = ref(true)
@@ -285,21 +317,54 @@ const evaluationTypes = [
 const serviceNames = { A: 'Origen', B: 'Brújula', C: 'Atlas' }
 const getServiceName = (type) => serviceNames[type]
 
+const isParentForm = (form) => {
+  const title = (form.title || '').toLowerCase()
+  return title.includes('padre') || title.includes('parent')
+}
+
+const getFormIcon = (form) => {
+  if (isParentForm(form)) {
+    return { bg: 'bg-purple-50', text: 'text-purple-600' }
+  }
+  return { bg: 'bg-blue-50', text: 'text-blue-600' }
+}
+
+const getFormResponse = (form) => {
+  return formResponses.value.find(r => r.formId === form.id)
+}
+
+const getFormAnsweredCount = (form) => {
+  const response = getFormResponse(form)
+  if (!response?.responses || !form.fields) return 0
+  return Object.keys(response.responses).filter(k => response.responses[k]).length
+}
+
+const getFormCompletionPercent = (form) => {
+  if (!form.fields?.length) return 0
+  return Math.round((getFormAnsweredCount(form) / form.fields.length) * 100)
+}
+
+const getFormCompletionClass = (form) => {
+  const response = getFormResponse(form)
+  return response?.status === 'completed' ? 'text-green-600' : 'text-yellow-600'
+}
+
+const getEvalFilesByCategory = (category) => {
+  return evaluationFiles.value.filter(e => e.category === category && e.downloadURL)
+}
+
 const loadData = async () => {
   loading.value = true
   userDetail.value = await userService.getUserById(userId)
   documents.value = await documentService.getUserDocuments(userId)
   accessKeys.value = await evaluationService.getUserAccessKeys(userId)
   reports.value = await reportService.getUserReports(userId)
+  evaluationFiles.value = await evaluationService.getUserEvaluations(userId)
 
-  if (userDetail.value?.serviceType) {
-    forms.value = await formService.getFormsByService(userDetail.value.serviceType)
-  }
   const allForms = [...(await formService.getFormsByService('A')), ...(await formService.getFormsByService('B')), ...(await formService.getFormsByService('C'))]
   forms.value = allForms
 
-  const responsesData = await formService.getUserFormResponses(userId)
-  formResponses.value = responsesData
+  formResponses.value = await formService.getUserFormResponses(userId)
 
   loading.value = false
 }
@@ -308,13 +373,8 @@ const toggleSection = (section) => {
   openSections[section] = !openSections[section]
 }
 
-const toggleFormResponses = (responseId) => {
-  expandedForms[responseId] = !expandedForms[responseId]
-}
-
-const getFormTitle = (formId) => {
-  const form = forms.value.find(f => f.id === formId)
-  return form?.title || 'Formulario'
+const toggleFormResponses = (formId) => {
+  expandedForms[formId] = !expandedForms[formId]
 }
 
 const formatDate = (timestamp) => {
@@ -340,11 +400,16 @@ const uploadEvalFile = async (event, evalType) => {
   const file = event.target.files[0]
   if (!file) return
   uploadingEval.value = evalType.key
-  await evaluationService.createEvaluation(userId, {
-    title: evalType.title,
-    instructions: `Resultado de ${evalType.title}`,
-    category: evalType.key
-  })
+  try {
+    await evaluationService.uploadEvaluationFile(userId, file, {
+      title: evalType.title,
+      instructions: `Resultado de ${evalType.title}`,
+      category: evalType.key
+    })
+    evaluationFiles.value = await evaluationService.getUserEvaluations(userId)
+  } catch (err) {
+    console.error('Error uploading evaluation file:', err)
+  }
   uploadingEval.value = null
 }
 

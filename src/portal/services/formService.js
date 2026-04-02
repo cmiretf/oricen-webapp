@@ -37,6 +37,13 @@ export const formService = {
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   },
 
+  async getFormResponses(formId) {
+    const responsesRef = collection(db, 'formResponses')
+    const q = query(responsesRef, where('formId', '==', formId))
+    const snapshot = await getDocs(q)
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  },
+
   async saveFormResponse(userId, formId, responses) {
     const existingRef = collection(db, 'formResponses')
     const q = query(existingRef, where('userId', '==', userId), where('formId', '==', formId))

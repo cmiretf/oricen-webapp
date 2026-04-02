@@ -7,7 +7,7 @@
         <img
           :src="logo"
           alt="Oricen Logo"
-          class="h-16 w-auto brightness-0 invert"
+          class="h-16 w-auto"
         />
         <div class="mt-24">
           <h1 class="text-5xl font-bold leading-tight">
@@ -37,15 +37,14 @@
 
     <!-- Right Panel - Light Grey/White -->
     <div
-      class="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center py-12 px-4"
+      class="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center py-6 px-4"
     >
       <div class="max-w-md w-full">
-        <div class="bg-white rounded-lg shadow-lg p-8">
-          <p class="animate-pulse text-2xl font-bold text-orange-500 mb-4">⚠️ TESTING CARLOS ⚠️</p>
-          <h2 class="text-3xl font-bold text-gray-900 mb-2">
+        <div class="bg-white rounded-lg shadow-lg p-6 sm:p-8">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
             Bienvenido de nuevo
           </h2>
-          <p class="text-gray-600 mb-8">
+          <p class="text-gray-600 mb-5 text-sm">
             Ingresa a tu cuenta para continuar con tu proceso.
           </p>
 
@@ -82,8 +81,8 @@
             </p>
           </div>
 
-          <div v-else class="space-y-6">
-            <form @submit.prevent="handleEmailAuth" class="space-y-4">
+          <div v-else class="space-y-4">
+            <form @submit.prevent="handleEmailAuth" class="space-y-3">
               <div>
                 <label
                   for="email"
@@ -133,7 +132,7 @@
               </div>
               <button
                 type="submit"
-                class="w-full py-4 bg-[#2B4C7E] text-white font-semibold rounded-xl hover:bg-[#1a3a61] transition-all duration-200 active:scale-[0.98]"
+                class="w-full py-3 bg-[#2B4C7E] text-white font-semibold rounded-xl hover:bg-[#1a3a61] transition-all duration-200 active:scale-[0.98]"
               >
                 {{ isRegisterMode ? "Crear cuenta" : "Iniciar sesión" }}
               </button>
@@ -152,7 +151,7 @@
               </button>
             </div>
 
-            <div class="relative py-4">
+            <div class="relative py-2">
               <div class="absolute inset-0 flex items-center">
                 <div class="w-full border-t border-gray-200"></div>
               </div>
@@ -163,10 +162,10 @@
               </div>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-3">
               <button
                 @click="onGoogleClick"
-                class="group relative w-full flex items-center justify-center gap-3 px-4 py-4 bg-white border border-gray-200 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm active:scale-[0.98]"
+                class="group relative w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm active:scale-[0.98]"
               >
                 <img
                   src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png"
@@ -204,7 +203,7 @@
             </div>
           </div>
 
-          <div class="mt-12 pt-8 border-t border-gray-100">
+          <div class="mt-4 pt-4 border-t border-gray-100">
             <p class="text-xs text-center text-gray-400 leading-relaxed">
               Al continuar, aceptas nuestros
               <a href="#" class="underline hover:text-gray-600"

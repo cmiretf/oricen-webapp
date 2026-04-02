@@ -1,17 +1,23 @@
-import { db } from '../firebase'
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
+import { db, storage, auth } from '../firebase'
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
   deleteDoc,
   query,
   where,
   orderBy,
-  serverTimestamp 
+  serverTimestamp
 } from 'firebase/firestore'
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject
+} from 'firebase/storage'
 
 export const evaluationService = {
   async createEvaluation(userId, evaluationData) {
@@ -23,6 +29,35 @@ export const evaluationService = {
       updatedAt: serverTimestamp()
     })
     return { id: docRef.id, ...evaluationData }
+  },
+
+  async uploadEvaluationFile(userId, file, metadata = {}) {
+    const currentUser = auth.currentUser
+    if (!currentUser) throw new Error('User not authenticated')
+
+    const storagePath = `users/${userId}/evaluations/${Date.now()}_${file.name}`
+    const storageRef = ref(storage, storagePath)
+    const snapshot = await uploadBytes(storageRef, file)
+    const downloadURL = await getDownloadURL(snapshot.ref)
+
+    const evalData = {
+      userId,
+      uploaderId: currentUser.uid,
+      title: metadata.title || file.name,
+      instructions: metadata.instructions || '',
+      category: metadata.category || 'general',
+      fileName: file.name,
+      fileType: file.type,
+      fileSize: file.size,
+      storagePath: snapshot.ref.fullPath,
+      downloadURL,
+      status: 'pending',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    }
+
+    const docRef = await addDoc(collection(db, 'evaluations'), evalData)
+    return { id: docRef.id, ...evalData }
   },
 
   async getUserEvaluations(userId) {
