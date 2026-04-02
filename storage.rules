@@ -1,0 +1,14 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{userId}/{allPaths=**} {
+      // Cualquier usuario autenticado puede leer
+      allow read: if request.auth != null;
+      // Cualquier usuario autenticado puede subir (máx 25MB)
+      allow create, update: if request.auth != null
+                            && request.resource.size < 25 * 1024 * 1024;
+      // Cualquier usuario autenticado puede borrar
+      allow delete: if request.auth != null;
+    }
+  }
+}

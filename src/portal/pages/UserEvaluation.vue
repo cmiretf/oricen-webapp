@@ -36,8 +36,8 @@
                   </div>
                   <div class="flex items-center gap-3 flex-shrink-0">
                     <a
-                      v-if="test.hasInstructions"
-                      :href="getTestExternalLink(test.key)"
+                      v-if="getTestFiles(test.key).length > 0"
+                      :href="getTestFiles(test.key)[0].downloadURL"
                       target="_blank"
                       class="px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap"
                     >
@@ -128,31 +128,6 @@
           </div>
         </div>
 
-        <!-- CLAVES DE ACCESO -->
-        <div class="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 class="text-lg font-bold text-gray-900 mb-2">Claves de Acceso</h2>
-          <p class="text-gray-600 text-sm mb-4">Estas claves son personales y únicas para ti. No las compartas con nadie.</p>
-
-          <div v-if="accessKeys.length > 0" class="space-y-3">
-            <div
-              v-for="key in accessKeys"
-              :key="key.id"
-              class="bg-gray-50 border border-gray-200 rounded-lg p-4"
-            >
-              <div class="flex justify-between items-start">
-                <div>
-                  <p class="font-medium text-gray-900">{{ key.testName }}</p>
-                  <p class="text-sm text-gray-500 mt-1">{{ key.description }}</p>
-                </div>
-                <div class="text-right">
-                  <p class="font-mono bg-white px-3 py-1 rounded border text-lg">{{ key.accessCode }}</p>
-                  <p class="text-xs text-gray-500 mt-1">{{ key.used ? 'Usada' : 'Sin usar' }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p v-else class="text-gray-500">No hay claves de acceso asignadas</p>
-        </div>
       </div>
     </div>
   </UserPortalLayout>
@@ -169,7 +144,6 @@ const { user, initAuth } = useAuth()
 initAuth()
 
 const evaluations = ref([])
-const accessKeys = ref([])
 const loading = ref(true)
 const error = ref(null)
 const activeFormSection = ref(null)
@@ -185,7 +159,6 @@ const testTypes = [
     title: 'Prueba de Intereses Profesionales',
     description: 'Descubre tus intereses vocacionales a través de este test especializado.',
     icon: '🧭',
-    hasInstructions: true,
     hasStatus: false
   },
   {
@@ -193,7 +166,6 @@ const testTypes = [
     title: 'Prueba de Aptitudes Cognitivas',
     description: 'Evalúa tus capacidades cognitivas y aptitudes principales.',
     icon: '🧠',
-    hasInstructions: true,
     hasStatus: false
   },
   {
@@ -202,7 +174,6 @@ const testTypes = [
     description: 'Completa el test de personalidad en la plataforma externa.',
     icon: '🎭',
     platform: 'Plataforma externa',
-    hasInstructions: false,
     hasStatus: true
   },
   {
@@ -210,18 +181,12 @@ const testTypes = [
     title: 'Prueba de Intereses por Sectores',
     description: 'Completa el formulario de intereses sectoriales directamente en la plataforma.',
     icon: '🏢',
-    hasInstructions: false,
     hasStatus: false,
     hasForm: true
   }
 ]
 
 const completedTests = ref({})
-
-const getTestExternalLink = (testKey) => {
-  const eval_ = evaluations.value.find(e => e.category === testKey && e.externalLink)
-  return eval_?.externalLink || '#'
-}
 
 const getTestFiles = (testKey) => {
   return evaluations.value.filter(e => e.category === testKey && e.downloadURL)
@@ -294,7 +259,6 @@ const loadData = async () => {
     error.value = null
     try {
       evaluations.value = await evaluationService.getUserEvaluations(user.value.uid)
-      accessKeys.value = await evaluationService.getUserAccessKeys(user.value.uid)
       await loadSectoresForm()
     } catch (err) {
       console.error('Error loading evaluations:', err)

@@ -182,24 +182,6 @@
               </div>
             </div>
 
-            <div class="border-t pt-4">
-              <h4 class="font-medium text-gray-900 mb-3">Claves de Acceso</h4>
-              <div class="space-y-2 mb-3">
-                <div v-for="key in accessKeys" :key="key.id" class="p-3 bg-gray-50 rounded-lg flex justify-between items-center">
-                  <div>
-                    <p class="font-medium text-sm">{{ key.testName }}</p>
-                    <p class="font-mono text-xs text-gray-600">{{ key.accessCode }}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <input v-model="newKey.testName" type="text" placeholder="Nombre del test" class="px-3 py-2 border rounded-lg text-sm" />
-                <input v-model="newKey.accessCode" type="text" placeholder="Código de acceso" class="px-3 py-2 border rounded-lg text-sm" />
-                <button @click="addAccessKey" class="px-3 py-2 bg-[#2B4C7E] text-white rounded-lg text-sm font-medium hover:bg-[#1a3a61] transition-colors" :disabled="!newKey.testName || !newKey.accessCode">
-                  Añadir
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -283,7 +265,6 @@ const userId = route.params.id
 
 const userDetail = ref(null)
 const documents = ref([])
-const accessKeys = ref([])
 const reports = ref([])
 const evaluationFiles = ref([])
 const formResponses = ref([])
@@ -305,13 +286,11 @@ const openSections = reactive({
 const expandedForms = reactive({})
 const evalInputs = reactive({})
 
-const newKey = reactive({ testName: '', accessCode: '' })
-
 const evaluationTypes = [
-  { key: 'intereses', title: 'Prueba de Intereses Profesionales', description: 'Sube aquí el informe de resultados de intereses vocacionales', icon: '🧭' },
-  { key: 'aptitudes', title: 'Prueba de Aptitudes Cognitivas', description: 'Sube aquí el informe de resultados de las pruebas cognitivas', icon: '🧠' },
-  { key: 'personalidad', title: 'Prueba de Personalidad', description: 'Sube aquí el informe de resultados de la prueba de personalidad', icon: '🎭' },
-  { key: 'sectores', title: 'Prueba de Intereses por Sectores', description: 'Sube aquí el informe de resultados de los intereses sectoriales', icon: '🏢' }
+  { key: 'intereses', title: 'Prueba de Intereses Profesionales', description: 'Sube aquí las instrucciones y claves de acceso', icon: '🧭' },
+  { key: 'aptitudes', title: 'Prueba de Aptitudes Cognitivas', description: 'Sube aquí las instrucciones y claves de acceso', icon: '🧠' },
+  { key: 'personalidad', title: 'Prueba de Personalidad', description: 'Sube aquí las instrucciones y claves de acceso', icon: '🎭' },
+  { key: 'sectores', title: 'Prueba de Intereses por Sectores', description: 'Sube aquí las instrucciones y claves de acceso', icon: '🏢' }
 ]
 
 const serviceNames = { A: 'Origen', B: 'Brújula', C: 'Atlas' }
@@ -357,7 +336,6 @@ const loadData = async () => {
   loading.value = true
   userDetail.value = await userService.getUserById(userId)
   documents.value = await documentService.getUserDocuments(userId)
-  accessKeys.value = await evaluationService.getUserAccessKeys(userId)
   reports.value = await reportService.getUserReports(userId)
   evaluationFiles.value = await evaluationService.getUserEvaluations(userId)
 
@@ -403,7 +381,7 @@ const uploadEvalFile = async (event, evalType) => {
   try {
     await evaluationService.uploadEvaluationFile(userId, file, {
       title: evalType.title,
-      instructions: `Resultado de ${evalType.title}`,
+      instructions: `Instrucciones y claves de acceso - ${evalType.title}`,
       category: evalType.key
     })
     evaluationFiles.value = await evaluationService.getUserEvaluations(userId)
@@ -411,13 +389,6 @@ const uploadEvalFile = async (event, evalType) => {
     console.error('Error uploading evaluation file:', err)
   }
   uploadingEval.value = null
-}
-
-const addAccessKey = async () => {
-  await evaluationService.addAccessKey(userId, { ...newKey })
-  accessKeys.value = await evaluationService.getUserAccessKeys(userId)
-  newKey.testName = ''
-  newKey.accessCode = ''
 }
 
 const uploadReport = async (event) => {

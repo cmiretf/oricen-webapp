@@ -1,0 +1,69 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img "Oricen Logo" [ref=e7]
+        - heading "Panel de Administración" [level=1] [ref=e8]
+      - generic [ref=e9]:
+        - generic [ref=e10]: cmiretf@gmail.com
+        - button "Cerrar sesión" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - complementary [ref=e13]:
+      - navigation [ref=e14]:
+        - link "Dashboard" [ref=e15] [cursor=pointer]:
+          - /url: /admin
+          - img [ref=e16]
+          - text: Dashboard
+        - link "Usuarios" [ref=e18] [cursor=pointer]:
+          - /url: /admin/usuarios
+          - img [ref=e19]
+          - text: Usuarios
+        - link "Formularios" [ref=e21] [cursor=pointer]:
+          - /url: /admin/formularios
+          - img [ref=e22]
+          - text: Formularios
+        - link "Citas" [ref=e24] [cursor=pointer]:
+          - /url: /admin/citas
+          - img [ref=e25]
+          - text: Citas
+    - main [ref=e27]:
+      - generic [ref=e68]:
+        - generic [ref=e69]:
+          - heading "Detalle de Usuario - oricen.cmiretf" [level=2] [ref=e70]
+          - link "Volver" [ref=e71] [cursor=pointer]:
+            - /url: /admin/usuarios
+        - generic [ref=e73]:
+          - generic [ref=e74]: o
+          - generic [ref=e75]:
+            - heading "oricen.cmiretf" [level=3] [ref=e76]
+            - paragraph [ref=e77]: oricen.cmiretf@gmail.com
+            - paragraph [ref=e78]: "Plan Contratado: Atlas"
+        - generic [ref=e79]:
+          - button "Documentos Subidos (2)" [ref=e81] [cursor=pointer]:
+            - generic [ref=e82]:
+              - img [ref=e83]
+              - generic [ref=e85]: Documentos Subidos
+              - generic [ref=e86]: (2)
+            - img [ref=e87]
+          - button "Formularios (5)" [ref=e90] [cursor=pointer]:
+            - generic [ref=e91]:
+              - img [ref=e92]
+              - generic [ref=e94]: Formularios
+              - generic [ref=e95]: (5)
+            - img [ref=e96]
+          - button "Evaluación" [ref=e99] [cursor=pointer]:
+            - generic [ref=e100]:
+              - img [ref=e101]
+              - generic [ref=e103]: Evaluación
+            - img [ref=e104]
+          - button "Entrevista Ver Detalle >" [ref=e107] [cursor=pointer]:
+            - generic [ref=e108]:
+              - img [ref=e109]
+              - generic [ref=e111]: Entrevista
+            - link "Ver Detalle >" [ref=e112]:
+              - /url: /admin/citas
+          - button "Informe Final" [ref=e114] [cursor=pointer]:
+            - generic [ref=e115]:
+              - img [ref=e116]
+              - generic [ref=e118]: Informe Final
+            - img [ref=e119]

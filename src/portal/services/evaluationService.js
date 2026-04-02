@@ -74,20 +74,4 @@ export const evaluationService = {
     })
   },
 
-  async addAccessKey(userId, keyData) {
-    const docRef = await addDoc(collection(db, 'accessKeys'), {
-      userId,
-      ...keyData,
-      used: false,
-      createdAt: serverTimestamp()
-    })
-    return { id: docRef.id, ...keyData }
-  },
-
-  async getUserAccessKeys(userId) {
-    const keysRef = collection(db, 'accessKeys')
-    const q = query(keysRef, where('userId', '==', userId))
-    const snapshot = await getDocs(q)
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-  }
 }
