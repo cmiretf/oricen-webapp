@@ -33,5 +33,5 @@ GUIA_*
 SOLUCION_*
 
 src/portal/firebase.config.local.js
-videos/
+docs/
 .env*
