@@ -29,6 +29,9 @@ attached_assets/
 attached_assets
 agent_instructions.md
 actual_rules.md
+GUIA_*
+SOLUCION_*
 
 src/portal/firebase.config.local.js
 videos/
+.env*
